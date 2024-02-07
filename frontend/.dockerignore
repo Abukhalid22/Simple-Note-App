@@ -1,16 +1,10 @@
 # General
-*.log
-*.pyc
-*.pyo
-*.pyd
-__pycache__/
-.db
-.db-journal
-.DS_Store
-Thumbs.db
-.env
-.env.local
-.env.*.local
+**/.git
+**/.gitignore
+**/.dockerignore
+**/README.md
+**/*.md
+**/LICENSE
 
 # Virtual environment
 notesenv/
@@ -28,6 +22,8 @@ pip-selfcheck.json
 *.sqlite3
 *.sqlite3-journal
 media/
+# Excluding migrations from being ignored to ensure they are included in the Docker context
+# !**/migrations
 
 # React specific
 node_modules/
@@ -44,7 +40,22 @@ yarn-error.log
 
 # Operating System specific files
 .DS_Store
+Thumbs.db
 
-# Ignore Docker volume directories
-data/
-volumes/
+# Python artifacts
+**/*.pyc
+**/*.pyo
+**/__pycache__/
+*.egg-info/
+dist/
+build/
+
+# Logs and databases
+*.log
+.db
+.db-journal
+
+# Environment files
+.env
+.env.local
+.env.*.local
