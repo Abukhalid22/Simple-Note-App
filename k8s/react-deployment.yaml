@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-frontend
+  template:
+    metadata:
+      labels:
+        app: react-frontend
+    spec:
+      containers:
+      - name: react-frontend
+        image: mctoosh94/mynotes:frontend-latest  # Ensure this matches your Docker Hub image name and tag
+        ports:
+        - containerPort: 80  # Assuming your React app's Dockerfile exposes port 80

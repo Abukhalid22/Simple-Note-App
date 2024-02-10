@@ -1,22 +1,12 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  name: django-backend
+  name: react-frontend-service
 spec:
-  replicas: 1
+  type: NodePort
   selector:
-    matchLabels:
-      app: django-backend
-  template:
-    metadata:
-      labels:
-        app: django-backend
-    spec:
-      containers:
-      - name: django-backend
-        image: mctoosh94/mynotes:backend-latest  # Use :latest for development
-        ports:
-        - containerPort: 8000
-        env:
-        - name: PYTHONUNBUFFERED
-          value: "1"
+    app: react-frontend
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30002  # Specify a nodePort in the allowable range if you have a preference
