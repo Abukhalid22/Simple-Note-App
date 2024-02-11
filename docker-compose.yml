@@ -4,7 +4,7 @@ services:
   backend:
     build: 
       context: .  # this path is where the Django Dockerfile is located
-    command: /bin/sh -c "python manage.py migrate && gunicorn mynotes.wsgi:application --bind 0.0.0.0:8000"
+    # command: /bin/sh -c "python manage.py migrate && gunicorn mynotes.wsgi:application --bind 0.0.0.0:8000"
 
     ports:
       - "8000:8000"  # Exposes Django on port 8000 on your host
