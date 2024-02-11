@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ReactComponent as ArrowLeft } from "../assets/arrow-left.svg";
-import { API_URL } from '../config'; // Import API_URL
+const API_URL = window.__env.REACT_APP_API_URL;
 
 const NotePage = () => {
   const { id } = useParams();

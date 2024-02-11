@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ListItem from '../components/ListItem';
 import AddButton from '../components/AddButton';
-import { API_URL } from '../config'; // Import API_URL
+const API_URL = window.__env.REACT_APP_API_URL;
 
 const NotesListPage = () => {
     let [notes, setNotes] = useState([]);

@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-r-z-hjqp24h+2n-u8uv6gg)ht2d0jla7^8p068f9)5xp8k_rep
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django-backend-service']
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django-backend-service']
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition: Connect our App/API to Django Projects
