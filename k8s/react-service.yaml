@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: react-frontend-service
 spec:
-  type: NodePort
+  type: NodePort  # Or LoadBalancer in cloud environments
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30002  # Optionally specify a nodePort; otherwise, one will be allocated automatically
   selector:
     app: react-frontend
-  ports:
-    - port: 80
-      targetPort: 80
-      nodePort: 30002  # Specify a nodePort in the allowable range if you have a preference
