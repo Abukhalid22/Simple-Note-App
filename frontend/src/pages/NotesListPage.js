@@ -1,35 +1,35 @@
-import React, {useState, useEffect} from 'react'
-import ListItem from '../components/ListItem'
-import AddButton from '../components/AddButton'
+import React, { useState, useEffect } from 'react';
+import ListItem from '../components/ListItem';
+import AddButton from '../components/AddButton';
+import { API_URL } from '../config'; // Import API_URL
 
 const NotesListPage = () => {
-
-    let [notes, setNotes] = useState([])
+    let [notes, setNotes] = useState([]);
 
     useEffect(() => {
-        getNotes()
-    }, [])
+        getNotes();
+    }, []);
 
     let getNotes = async () => {
-        let response = await fetch('/api/notes/')
-        let data = await response.json()
-        setNotes(data)
+        let response = await fetch(`${API_URL}/api/notes/`);
+        let data = await response.json();
+        setNotes(data);
     }
 
-  return (
-    <div className="notes">
-        <div className="notes-header">
-            <h2 className="notes-title">&#9782; Notes</h2>
-            <p className="notes-count">{notes.length}</p>
+    return (
+        <div className="notes">
+            <div className="notes-header">
+                <h2 className="notes-title">&#9782; Notes</h2>
+                <p className="notes-count">{notes.length}</p>
+            </div>
+            <div className="notes-list">
+                {notes.map((note, index) => (
+                    <ListItem key={index} note={note} />
+                ))}
+            </div>
+            <AddButton />
         </div>
-        <div className="notes-list">
-            {notes.map((notes, index) => (
-                <ListItem key={index} note={notes} />
-            ))}
-        </div>
-        <AddButton />
-    </div>
-  )
+    );
 }
 
-export default NotesListPage
+export default NotesListPage;

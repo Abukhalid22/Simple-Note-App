@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ReactComponent as ArrowLeft } from "../assets/arrow-left.svg";
+import { API_URL } from '../config'; // Import API_URL
 
 const NotePage = () => {
   const { id } = useParams();
@@ -9,9 +10,9 @@ const NotePage = () => {
 
   useEffect(() => {
     const getNote = async () => {
+      if (id === 'new') return;
       try {
-        if (id === 'new') return
-        let response = await fetch(`/api/notes/${id}`);
+        let response = await fetch(`${API_URL}/api/notes/${id}`);
         let data = await response.json();
         setNote(data);
       } catch (error) {
@@ -23,7 +24,7 @@ const NotePage = () => {
   }, [id]);
 
   let updateNote = async () => {
-    fetch(`/api/notes/${id}/update/`, {
+    fetch(`${API_URL}/api/notes/${id}/update/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +34,7 @@ const NotePage = () => {
   };
 
   let createNote = async () => {
-    fetch(`/api/notes/create/`, {
+    fetch(`${API_URL}/api/notes/create/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,25 +44,24 @@ const NotePage = () => {
   };
 
   let deleteNote = async () => {
-    fetch(`/api/notes/${id}/delete/`, {
+    fetch(`${API_URL}/api/notes/${id}/delete/`, {
       method: 'DELETE',
       headers: {
         "Content-Type": "application/json",
       }
-    })
+    });
     navigate("/");
-    
   }
 
   let handleSubmit = () => {
-    if (id !== 'new') {
-      if (note && note.body === '') {
-        deleteNote();
+    if (id !== 'new' && note && note.body === '') {
+      deleteNote();
+    } else {
+      if (id === 'new' && note && note.body !== null) {
+        createNote();
       } else {
         updateNote();
       }
-    } else if (id === 'new' && note && note.body !== null) {
-      createNote();
     }
     navigate("/");
   };
@@ -78,17 +78,11 @@ const NotePage = () => {
         </h3>
         {id !== 'new' ? (
           <button onClick={deleteNote}>Delete</button>
-        ): (
+        ) : (
           <button onClick={handleSubmit}>Done</button>
         )}
-        
       </div>
-      <textarea
-        onChange={(e) => {
-          handleChange(e.target.value)
-        }}
-        value={note?.body}
-      ></textarea>
+      <textarea onChange={(e) => handleChange(e.target.value)} value={note?.body}></textarea>
     </div>
   );
 };
