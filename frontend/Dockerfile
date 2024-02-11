@@ -1,19 +1,24 @@
 # Build stage
 FROM node:20-alpine as build-stage
-WORKDIR /frontend
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
 
 # Serve stage
-FROM nginx:stable-alpine as serve-stage
-COPY --from=build-stage /frontend/build /usr/share/nginx/html
+FROM nginx:stable-alpine
+COPY --from=build-stage /app/build /usr/share/nginx/html
 
-# New: Copy the entrypoint script to the image
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Copy custom nginx configuration
+COPY nginx/nginx-setup.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
-ENTRYPOINT ["/entrypoint.sh"]
+# Copy the set-api-url.js.template file from the public directory
+COPY public/set-api-url.js.template /usr/share/nginx/html/set-api-url.js.template
+
+# Install gettext for envsubst and replace API URL placeholder
+RUN apk add --no-cache gettext && \
+    envsubst '${REACT_APP_API_URL}' < /usr/share/nginx/html/set-api-url.js.template > /usr/share/nginx/html/set-api-url.js && \
+    rm /usr/share/nginx/html/set-api-url.js.template
+
 CMD ["nginx", "-g", "daemon off;"]

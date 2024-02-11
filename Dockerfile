@@ -1,7 +1,8 @@
 # Use an official lightweight Python runtime as a base image
-FROM python:3.10
+FROM python:3.11-slim
 
-# Set environment variables
+# Set environment variables to prevent Python from writing .pyc files to disc
+# and to ensure stdout and stderr are directly forwarded to terminal without being buffered
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
@@ -12,14 +13,8 @@ WORKDIR /django
 COPY . .
 
 # Install the Python dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Combining the pip upgrade and requirements installation into a single RUN reduces image layers
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
-# Copy entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-
-# Make entrypoint script executable
-RUN chmod +x /entrypoint.sh
-
-# Set the entrypoint script to run on container startup
-ENTRYPOINT ["/entrypoint.sh"]
+# Run Django migrations and start Gunicorn server as the default command
+CMD python manage.py migrate --noinput && gunicorn mynotes.wsgi:application --bind 0.0.0.0:8000

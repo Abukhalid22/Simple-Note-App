@@ -12,8 +12,8 @@ Thumbs.db
 .env.local
 .env.*.local
 
-# Virtual environment
 notesenv/
+notesenv/lib/
 *.venv
 env/
 bin/
