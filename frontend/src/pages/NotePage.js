@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ReactComponent as ArrowLeft } from "../assets/arrow-left.svg";
 // Directly use the Minikube IP and the backend service port for testing
-const API_URL = 'http://192.168.49.2:8000';
+const API_URL = 'http://127.0.0.1:8000';
 
 
 const NotePage = () => {
