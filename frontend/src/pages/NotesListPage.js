@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ListItem from '../components/ListItem';
 import AddButton from '../components/AddButton';
-const API_URL = window.__env.REACT_APP_API_URL;
+// Directly use the Minikube IP and the backend service port for testing
+const API_URL = 'http://192.168.49.2:8000';
+
 
 const NotesListPage = () => {
     let [notes, setNotes] = useState([]);
