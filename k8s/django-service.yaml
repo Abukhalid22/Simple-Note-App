@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: django-backend-service
 spec:
-  type: ClusterIP # This does not need to be external 
+  type: ClusterIP
   ports:
   - port: 8000
     targetPort: 8000

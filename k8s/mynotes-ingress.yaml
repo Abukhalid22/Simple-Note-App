@@ -2,6 +2,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mynotes-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"  # For development. Specify exact origins for production
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization, Origin, Content-Type, Accept"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
 spec:
   rules:
   - http:

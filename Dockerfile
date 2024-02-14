@@ -9,12 +9,12 @@ ENV PYTHONUNBUFFERED 1
 # Create and set the working directory to /django in the container
 WORKDIR /django
 
-# Copy only the relevant files for the Django project
-COPY . .
-
-# Install the Python dependencies
-# Combining the pip upgrade and requirements installation into a single RUN reduces image layers
+# Copy the requirements file first to leverage Docker cache
+COPY requirements.txt /django/
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+
+# After installing dependencies, copy the rest of your application
+COPY . /django/
 
 # Run Django migrations and start Gunicorn server as the default command
 CMD python manage.py migrate --noinput && gunicorn mynotes.wsgi:application --bind 0.0.0.0:8000

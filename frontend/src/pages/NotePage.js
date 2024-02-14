@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ReactComponent as ArrowLeft } from "../assets/arrow-left.svg";
 // Directly use the Minikube IP and the backend service port for testing
-const API_URL = 'http://127.0.0.1:8000';
+// const API_URL = 'http://127.0.0.1:8000';
 
 
 const NotePage = () => {
@@ -14,7 +14,7 @@ const NotePage = () => {
     const getNote = async () => {
       if (id === 'new') return;
       try {
-        let response = await fetch(`${API_URL}/api/notes/${id}`);
+        let response = await fetch(`/api/notes/${id}`);
         let data = await response.json();
         setNote(data);
       } catch (error) {
@@ -26,7 +26,7 @@ const NotePage = () => {
   }, [id]);
 
   let updateNote = async () => {
-    fetch(`${API_URL}/api/notes/${id}/update/`, {
+    fetch(`/api/notes/${id}/update/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +36,7 @@ const NotePage = () => {
   };
 
   let createNote = async () => {
-    fetch(`${API_URL}/api/notes/create/`, {
+    fetch(`/api/notes/create/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ const NotePage = () => {
   };
 
   let deleteNote = async () => {
-    fetch(`${API_URL}/api/notes/${id}/delete/`, {
+    fetch(`/api/notes/${id}/delete/`, {
       method: 'DELETE',
       headers: {
         "Content-Type": "application/json",

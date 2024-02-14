@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ListItem from '../components/ListItem';
 import AddButton from '../components/AddButton';
 // Directly use the Minikube IP and the backend service port for testing
-const API_URL = 'http://127.0.0.1:8000';
+// const API_URL = 'http://127.0.0.1:8000';
 
 
 const NotesListPage = () => {
@@ -13,7 +13,7 @@ const NotesListPage = () => {
     }, []);
 
     let getNotes = async () => {
-        let response = await fetch(`${API_URL}/api/notes/`);
+        let response = await fetch(`/api/notes/`);
         let data = await response.json();
         setNotes(data);
     }

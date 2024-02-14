@@ -15,8 +15,6 @@ spec:
       containers:
       - name: react-frontend
         image: mctoosh94/mynotes:frontend-latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
-        env:
-        - name: REACT_APP_API_URL
-          value: "http://django-backend-service:8000"
