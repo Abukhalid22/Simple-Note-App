@@ -25,7 +25,7 @@ jobs:
         context: .
         file: ./Dockerfile 
         push: true
-        tags: mctoosh94/mynotes:backend-latest  # Use :latest for development simplicity
+        tags: mctoosh94/mynotes:backend-${{ github.sha }}
 
     - name: Build and Push React Image
       uses: docker/build-push-action@v2
@@ -33,4 +33,16 @@ jobs:
         context: ./frontend
         file: ./frontend/Dockerfile  
         push: true
-        tags: mctoosh94/mynotes:frontend-latest  # Use :latest for development simplicity
+        tags: mctoosh94/mynotes:frontend-${{ github.sha }}
+
+    # Assuming you have a script ready to update your Kubernetes manifests
+    - name: Update Kubernetes Manifests with New Image Tags
+      run: |
+        sed -i 's|mctoosh94/mynotes:backend-latest|mctoosh94/mynotes:backend-${{ github.sha }}|' ./k8s/django-deployment.yaml
+        sed -i 's|mctoosh94/mynotes:frontend-latest|mctoosh94/mynotes:frontend-${{ github.sha }}|' ./k8s/react-deployment.yaml
+        git config user.name 'GitHub Actions'
+        git config user.email 'actions@github.com'
+        git add ./k8s/*.yaml
+        git commit -m "Update Kubernetes manifests to new image tags"
+        git push
+
