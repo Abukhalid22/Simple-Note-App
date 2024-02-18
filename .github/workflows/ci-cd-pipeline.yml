@@ -55,6 +55,16 @@ jobs:
           echo "Displaying updated react-deployment.yaml"
           cat ./k8s/react-deployment.yaml
           
+          # Debug: Display current directory and contents for verification
+          echo "Current directory:"
+          pwd
+          echo "Directory contents:"
+          ls -al
+          
+          # Debug: Display git status for further insights
+          echo "Git status:"
+          git status
+          
           # Explicitly check for changes
           git diff --quiet
           if [ $? -ne 0 ]; then
