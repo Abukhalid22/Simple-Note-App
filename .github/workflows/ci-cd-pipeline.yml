@@ -42,16 +42,15 @@ jobs:
         env:
           MY_PERSONAL_ACCESS_TOKEN: ${{ secrets.ARGOCD_NOTES_APP_PAT }}
         run: |
-          sed -i 's|mctoosh94/mynotes:backend-latest|${{ env.DJANGO_IMAGE_TAG }}|' ./k8s/django-deployment.yaml
-          sed -i 's|mctoosh94/mynotes:frontend-latest|${{ env.REACT_IMAGE_TAG }}|' ./k8s/react-deployment.yaml
+          sed -i "s|mctoosh94/mynotes:backend-latest|${{ env.DJANGO_IMAGE_TAG }}|" ./k8s/django-deployment.yaml
+          sed -i "s|mctoosh94/mynotes:frontend-latest|${{ env.REACT_IMAGE_TAG }}|" ./k8s/react-deployment.yaml
           
           # Check if there are any changes
-          if ! git diff --exit-code --quiet; then
+          if git diff --quiet; then
+            echo "No changes to Kubernetes manifests. Skipping commit and push."
+          else
             git config user.name 'GitHub Actions'
             git config user.email 'actions@github.com'
             git add ./k8s/*.yaml
             git commit -m "Update Kubernetes manifests to new image tags: ${{ github.sha }}"
-            git remote set-url origin https://${{ secrets.ARGOCD_NOTES_APP_PAT }}:x-oauth-basic@github.com/Abukhalid22/Simple-Note-App.git
-            git push origin HEAD:master
-          else
-            echo "No changes to Kubernetes manifests. Skipping commit and push."
+            git push https://${{ secrets.ARGOCD_NOTES_APP_PAT }}:x-oauth-basic@github.com/Abukhalid22/Simple-Note-App.git HEAD:master
