@@ -42,8 +42,14 @@ jobs:
         env:
           MY_PERSONAL_ACCESS_TOKEN: ${{ secrets.ARGOCD_NOTES_APP_PAT }}
         run: |
-          sed -i "s|mctoosh94/mynotes:backend-latest|${{ env.DJANGO_IMAGE_TAG }}|" ./k8s/django-deployment.yaml
-          sed -i "s|mctoosh94/mynotes:frontend-latest|${{ env.REACT_IMAGE_TAG }}|" ./k8s/react-deployment.yaml
+          sed -i "s|image: mctoosh94/mynotes:backend-.*|image: ${{ env.DJANGO_IMAGE_TAG }}|" ./k8s/django-deployment.yaml
+          sed -i "s|image: mctoosh94/mynotes:frontend-.*|image: ${{ env.REACT_IMAGE_TAG }}|" ./k8s/react-deployment.yaml
+          
+          # Debug: Display the updated files for verification
+          echo "Displaying updated django-deployment.yaml"
+          cat ./k8s/django-deployment.yaml
+          echo "Displaying updated react-deployment.yaml"
+          cat ./k8s/react-deployment.yaml
           
           # Explicitly check for changes
           git diff --quiet
@@ -56,4 +62,4 @@ jobs:
             git push https://${{ secrets.ARGOCD_NOTES_APP_PAT }}:x-oauth-basic@github.com/Abukhalid22/Simple-Note-App.git HEAD:master
           else
             echo "No changes to Kubernetes manifests. Skipping commit and push."
-          fi # This line was missing and is necessary to close the if statement.
+            fi
