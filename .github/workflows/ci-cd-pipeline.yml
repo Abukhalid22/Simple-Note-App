@@ -56,3 +56,4 @@ jobs:
             git push https://${{ secrets.ARGOCD_NOTES_APP_PAT }}:x-oauth-basic@github.com/Abukhalid22/Simple-Note-App.git HEAD:master
           else
             echo "No changes to Kubernetes manifests. Skipping commit and push."
+          fi # This line was missing and is necessary to close the if statement.
