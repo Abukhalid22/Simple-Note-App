@@ -71,7 +71,10 @@ jobs:
             echo "Changes detected, updating Kubernetes manifests."
             git config user.name 'GitHub Actions'
             git config user.email 'actions@github.com'
+            
+            # Add modified files to the staging area
             git add ./k8s/*.yaml
+            
             git commit -m "Update Kubernetes manifests to new image tags: ${{ github.sha }}"
             git push https://${{ secrets.ARGOCD_NOTES_APP_PAT }}:x-oauth-basic@github.com/Abukhalid22/Simple-Note-App.git HEAD:master
           else
