@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      # Add this step to fetch the latest changes from the repository
+      # Fetch latest changes from the repository to ensure we are updating the latest versions of files.
       - name: Fetch latest changes
         run: git fetch --prune --unshallow
 
@@ -43,40 +43,22 @@ jobs:
           tags: ${{ env.REACT_IMAGE_TAG }}
 
       - name: Update Kubernetes Manifests with New Image Tags
-        env:
-          MY_PERSONAL_ACCESS_TOKEN: ${{ secrets.ARGOCD_NOTES_APP_PAT }}
         run: |
           sed -i "s|image: mctoosh94/mynotes:backend-.*|image: ${{ env.DJANGO_IMAGE_TAG }}|" ./k8s/django-deployment.yaml
           sed -i "s|image: mctoosh94/mynotes:frontend-.*|image: ${{ env.REACT_IMAGE_TAG }}|" ./k8s/react-deployment.yaml
           
-          # Debug: Display the updated files for verification
-          echo "Displaying updated django-deployment.yaml"
-          cat ./k8s/django-deployment.yaml
-          echo "Displaying updated react-deployment.yaml"
-          cat ./k8s/react-deployment.yaml
+          # Check for changes and configure git
+          git config user.name 'GitHub Actions'
+          git config user.email 'actions@github.com'
           
-          # Debug: Display current directory and contents for verification
-          echo "Current directory:"
-          pwd
-          echo "Directory contents:"
-          ls -al
-          
-          # Debug: Display git status for further insights
-          echo "Git status:"
-          git status
-          
-          # Explicitly check for changes
-          git diff --quiet
-          if [ $? -ne 0 ]; then
+          # Check if there are any changes
+          git diff --quiet || {
             echo "Changes detected, updating Kubernetes manifests."
-            git config user.name 'GitHub Actions'
-            git config user.email 'actions@github.com'
             
             # Add modified files to the staging area
             git add ./k8s/*.yaml
             
+            # Commit and push the changes
             git commit -m "Update Kubernetes manifests to new image tags: ${{ github.sha }}"
             git push https://${{ secrets.ARGOCD_NOTES_APP_PAT }}:x-oauth-basic@github.com/Abukhalid22/Simple-Note-App.git HEAD:master
-          else
-            echo "No changes to Kubernetes manifests. Skipping commit and push."
-          fi
+          }
