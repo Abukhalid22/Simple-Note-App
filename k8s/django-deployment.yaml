@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: django-backend
-        image: mctoosh94/mynotes:backend-latest
+        image: mctoosh94/mynotes:backend-993aacbbd4779f41b08a4ff26a8713903abc57f3
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
