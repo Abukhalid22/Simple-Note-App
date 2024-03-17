@@ -636,6 +636,9 @@ With the new Docker images ready, the Kubernetes deployment configurations (e.g.
 
 ArgoCD monitors the Kubernetes configurations stored in the repository. Once it detects changes (such as the updated Docker image tags), it automatically applies these changes to the Kubernetes cluster, effectively deploying the new version of the application. ArgoCD ensures that the state of the cluster matches the state defined in the repository, adhering to the principles of GitOps.
 
+![image](https://github.com/Abukhalid22/Simple-Note-App/assets/53325143/0fa93f8b-3b02-4bf4-a30c-fa034527e959)
+
+
 ### **Step 6: Verification and Monitoring**
 
 After deployment, automated scripts or manual checks can be performed to verify that the application is running as expected. This is where future enhancements, such as integrating Prometheus and Grafana for monitoring and alerting, can provide significant value. These tools can offer real-time insights into the application's performance and health, allowing proactive issue resolution and system optimization.
