@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: react-frontend
-        image: mctoosh94/mynotes:frontend-5244db4eed12c783ca5bc4a634fe15e103ecc1af
+        image: mctoosh94/mynotes:frontend-37167c996cae5341dc857d8f59efad8ad646f74f
         imagePullPolicy: Always
         ports:
         - containerPort: 80
