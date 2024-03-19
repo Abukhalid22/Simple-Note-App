@@ -48,3 +48,17 @@ yarn-error.log
 # Ignore Docker volume directories
 data/
 volumes/
+
+# Terraform Ignores
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+*.tfvars.json
+*.tfvars.backup
+crash.log
+**/.terraform/*
+terraform.rc
+terraform.tfstate
+terraform.tfstate.backup
