@@ -43,6 +43,9 @@ jobs:
             -Dsonar.python.coverage.reportPaths=coverage.xml
             
 
+      - name: Install Pylint
+        run: pip install pylint
+
       - name: Lint Code
         run: |
           pylint src/**/*.py
