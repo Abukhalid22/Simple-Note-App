@@ -41,14 +41,13 @@ jobs:
             -Dsonar.organization=abukhalid22
             -Dsonar.projectKey=Abukhalid22_Simple-Note-App
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            
 
       - name: Install Pylint
         run: pip install pylint
 
       - name: Lint Code
         run: |
-          pylint src/**/*.py
+          find src/ -name "*.py" | xargs pylint
           npm run lint --prefix frontend
 
       - name: Login to Docker Hub
