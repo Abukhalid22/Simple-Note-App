@@ -19,10 +19,19 @@ jobs:
       - name: Fetch latest changes
         run: git fetch --prune --unshallow
 
+      - name: Run tests with coverage
+        run: coverage run manage.py test
+
+      - name: Generate coverage report in XML format
+        run: coverage xml -o coverage.xml
+
       - name: Run SonarCloud Analysis
         uses: SonarSource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
+          SONAR_COVERAGE_REPORT_PATH: coverage.xml
 
       - name: Install dependencies
         run: |
