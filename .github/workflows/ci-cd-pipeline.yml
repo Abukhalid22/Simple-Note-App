@@ -19,12 +19,10 @@ jobs:
       - name: Fetch latest changes
         run: git fetch --prune --unshallow
 
-      - name: Run SonarQube Analysis
+      - name: Run SonarCloud Analysis
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_SERVER_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: NoteApp
 
       - name: Install dependencies
         run: |
