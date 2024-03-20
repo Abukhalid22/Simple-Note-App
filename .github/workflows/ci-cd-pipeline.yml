@@ -47,7 +47,7 @@ jobs:
 
       - name: Lint Code
         run: |
-          find src/ -name "*.py" | xargs pylint
+          find Simple-Note-App/api -name "*.py" | xargs pylint
           npm run lint --prefix frontend
 
       - name: Login to Docker Hub
