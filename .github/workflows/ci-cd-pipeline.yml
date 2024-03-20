@@ -34,7 +34,7 @@ jobs:
       - name: Run SonarCloud Analysis
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }} # PAT
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
