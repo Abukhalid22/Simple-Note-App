@@ -126,6 +126,10 @@ jobs:
             git push https://${{ secrets.ARGOCD_NOTES_APP_PAT }}:x-oauth-basic@github.com/abukhalid22/Simple-Note-App.git HEAD:master
           }
 
+          # Add a sleep before scanning the images
+      - name: Wait for Docker images to be available on dockerhub
+        run: sleep 30s
+
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -135,7 +139,7 @@ jobs:
       - name: Image Scan Django with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/${{ env.USER }}/${{ env.DJANGO_IMAGE_TAG }}' # Use Docker Hub registry
+          image-ref: 'docker.io/mctoosh94/mynotes:backend-${{ github.sha }}' # Use Docker Hub registry
           format: 'sarif'
           output: 'trivy-image-results-django.sarif'
           severity: 'CRITICAL,HIGH'
@@ -143,7 +147,7 @@ jobs:
       - name: Image Scan React with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/${{ env.USER }}/${{ env.REACT_IMAGE_TAG }}' # Use Docker Hub registry
+          image-ref: 'docker.io/mctoosh94/mynotes:frontend-${{ github.sha }}' # Use Docker Hub registry
           format: 'sarif'
           output: 'trivy-image-results-react.sarif'
           severity: 'CRITICAL,HIGH'
