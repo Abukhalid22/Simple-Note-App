@@ -66,6 +66,21 @@ jobs:
                   echo "Pass"
               fi
 
+      - name: Get Snyk HTML report
+        run: snyk test --print-file-path --all-projects > snyk_report.html
+
+      - name: Convert HTML report to PDF
+        run: wkhtmltopdf snyk_report.html snyk_report.pdf
+
+      - name: Send Snyk report to Slack
+        uses: Ilshidur/action-slack@v2
+        with:
+          status: ${{ job.status }}
+          fields: report
+          report: snyk_report.pdf
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
+
       - name: Send notification on Slack using Webhooks
         uses: slackapi/slack-github-action@v1.24.0
         if: always()
