@@ -51,6 +51,7 @@ jobs:
         with:
           command: code test
           args: --severity-threshold=high  --sarif-file-output=snyk.sarif
+
       - name: Count total number of vulnerabilities
         run: |
           RESULTS_LENGTH=$(jq '.runs[0].results | length' snyk.sarif)
@@ -60,20 +61,25 @@ jobs:
       - name: Pass_or_Fail_the_job
         run: |
           if [ "$RESULTS_LENGTH" != 0 ]; then
-                  echo "Job Failed"
-                  exit 1
-              else
-                  echo "Pass"
-              fi
+            echo "Job Failed"
+            exit 1
+          else
+            echo "Pass"
+          fi
 
       - name: Get Snyk HTML report
         run: snyk test --print-file-path --all-projects > snyk_report.html
 
+      - name: Install wkhtmltopdf
+        run: sudo apt-get update && sudo apt-get install -y wkhtmltopdf
+
       - name: Convert HTML report to PDF
-        run: wkhtmltopdf snyk_report.html snyk_report.pdf
+        run: |
+          set -e
+          wkhtmltopdf snyk_report.html snyk_report.pdf
 
       - name: Send Snyk report to Slack
-        uses: Ilshidur/action-slack@v2
+        uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           fields: report
@@ -86,9 +92,9 @@ jobs:
         if: always()
         with:
           payload: |
-               {
-                 "text": "*The Snyk scan result for the repo is : ${{ job.status }}* \n*Number of vulnerabilities : ${{ env.RESULTS_LENGTH }}* \n*Detail*: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-               }
+            {
+              "text": "*The Snyk scan result for the repo is : ${{ job.status }}* \n*Number of vulnerabilities : ${{ env.RESULTS_LENGTH }}* \n*Detail*: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
 
