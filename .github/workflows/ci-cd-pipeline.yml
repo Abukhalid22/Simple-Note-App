@@ -12,7 +12,6 @@ jobs:
       DJANGO_IMAGE_TAG: mctoosh94/mynotes:backend-${{ github.sha }}
       REACT_IMAGE_TAG: mctoosh94/mynotes:frontend-${{ github.sha }}
       DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-
       PAT: ${{ secrets.MY_GITHUB_TOKEN }} # PAT
       USER: Abukhalid22
       REGISTRY: ghcr.io
@@ -162,4 +161,4 @@ jobs:
           category: 'image'
 
       - name: Upload the scan result to GitHub Security React
-        uses: github/codeql
+        uses: github/codeql-action/upload-sarif@v2
