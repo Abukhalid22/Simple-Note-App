@@ -50,9 +50,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: code test
-          args: --sarif-file-output=snyk.sarif
-      - name: Print the snyk sarif file
-        run : cat snyk.sarif
+          args: --severity-threshold=high  --sarif-file-output=snyk.sarif
       - name: Count total number of vulnerabilities
         run: |
           RESULTS_LENGTH=$(jq '.runs[0].results | length' snyk.sarif)
@@ -67,6 +65,17 @@ jobs:
               else
                   echo "Pass"
               fi
+
+      - name: Send notification on Slack using Webhooks
+        uses: slackapi/slack-github-action@v1.24.0
+        if: always()
+        with:
+          payload: |
+               {
+                 "text": "*The Snyk scan result for the repo is : ${{ job.status }}* \n*Number of vulnerabilities : ${{ env.RESULTS_LENGTH }}* \n*Detail*: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+               }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
