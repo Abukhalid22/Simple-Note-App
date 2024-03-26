@@ -45,7 +45,7 @@ jobs:
 
       - name: Install Snyk CLI
         run: npm install -g snyk
-        
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/python@master
         continue-on-error: true
@@ -71,7 +71,8 @@ jobs:
           fi
 
       - name: Get Snyk HTML report
-        run: snyk test --print-file-path --all-projects > snyk_report.html
+        run: snyk test --print-file-path --all-projects > snyk_report.html 2>&1 || echo "Failed to run Snyk test"
+
 
       - name: Install wkhtmltopdf
         run: sudo apt-get update && sudo apt-get install -y wkhtmltopdf
