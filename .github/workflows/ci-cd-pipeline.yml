@@ -1,4 +1,4 @@
-name: Build, Test, Analyze, Scan and Deploy
+name: Build, Test, Analyze, and Deploy
 
 on:
   push:
@@ -71,7 +71,7 @@ jobs:
           fi
 
       - name: Send notification on Slack using Webhooks
-        uses: 8398a7/action-slack@v3
+        uses: slackapi/slack-github-action@v1.24.0
         if: always()
         with:
           payload: |
