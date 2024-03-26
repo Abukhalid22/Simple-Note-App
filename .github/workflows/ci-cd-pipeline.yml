@@ -79,7 +79,7 @@ jobs:
           fields: report
           report: snyk_report.pdf
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
+          SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }} # Slack Secrets
 
       - name: Send notification on Slack using Webhooks
         uses: slackapi/slack-github-action@v1.24.0
