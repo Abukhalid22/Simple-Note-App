@@ -43,6 +43,9 @@ jobs:
             -Dsonar.projectKey=Abukhalid22_Simple-Note-App
             -Dsonar.python.coverage.reportPaths=coverage.xml
 
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+        
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/python@master
         continue-on-error: true
