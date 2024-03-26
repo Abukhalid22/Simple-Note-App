@@ -131,7 +131,7 @@ jobs:
       - name: Image Scan Django with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/${{ env.USER }}/${{ env.DJANGO_IMAGE_TAG }}:${{ github.sha }}' # Use Docker Hub registry
+          image-ref: 'docker.io/${{ env.USER }}/${{ env.DJANGO_IMAGE_TAG }}' # Use Docker Hub registry
           format: 'sarif'
           output: 'trivy-image-results-django.sarif'
           severity: 'CRITICAL,HIGH'
@@ -139,7 +139,7 @@ jobs:
       - name: Image Scan React with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/${{ env.USER }}/${{ env.REACT_IMAGE_TAG }}:${{ github.sha }}' # Use Docker Hub registry
+          image-ref: 'docker.io/${{ env.USER }}/${{ env.REACT_IMAGE_TAG }}' # Use Docker Hub registry
           format: 'sarif'
           output: 'trivy-image-results-react.sarif'
           severity: 'CRITICAL,HIGH'
