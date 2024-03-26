@@ -156,10 +156,10 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-image-results-django.sarif'
-          category: 'image'
+          category: 'django-image'
 
       - name: Upload the scan result to GitHub Security React
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-image-results-react.sarif'
-          category: 'image'
+          category: 'react-image'
