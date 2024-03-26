@@ -13,6 +13,11 @@ jobs:
       REACT_IMAGE_TAG: mctoosh94/mynotes:frontend-${{ github.sha }}
       DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
 
+      PAT: ${{ secrets.MY_GITHUB_TOKEN }} # PAT
+      USER: Abukhalid22
+      REGISTRY: ghcr.io
+      VERSION: v1
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -123,3 +128,38 @@ jobs:
             git commit -m "Update Kubernetes manifests to new image tags: ${{ github.sha }}"
             git push https://${{ secrets.ARGOCD_NOTES_APP_PAT }}:x-oauth-basic@github.com/Abukhalid22/Simple-Note-App.git HEAD:master
           }
+
+      - name: Login to gHCR
+        run: |
+          echo $PAT | docker login ${{ env.REGISTRY }} -u $USER --password-stdin
+          docker tag ${{ env.DJANGO_IMAGE_TAG }} ${{ env.REGISTRY }}/$USER/${{ env.DJANGO_IMAGE_TAG }}:${{ env.VERSION }}
+          docker tag ${{ env.REACT_IMAGE_TAG }} ${{ env.REGISTRY }}/$USER/${{ env.REACT_IMAGE_TAG }}:${{ env.VERSION }}
+          docker push ${{ env.REGISTRY }}/$USER/${{ env.DJANGO_IMAGE_TAG }}:${{ env.VERSION }}
+          docker push ${{ env.REGISTRY }}/$USER/${{ env.REACT_IMAGE_TAG }}:${{ env.VERSION }}
+
+      - name: Image Scan Django
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.REGISTRY }}/${{ env.USER }}/${{ env.DJANGO_IMAGE_TAG }}:${{ env.VERSION }}'
+          security-checks: 'vuln,secret,config'
+          format: 'sarif'
+          output: 'trivy-image-results-django.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Image Scan React
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.REGISTRY }}/${{ env.USER }}/${{ env.REACT_IMAGE_TAG }}:${{ env.VERSION }}'
+          security-checks: 'vuln,secret,config'
+          format: 'sarif'
+          output: 'trivy-image-results-react.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload the scan result to GitHub Security Django
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-image-results-django.sarif'
+          category: 'image'
+
+      - name: Upload the scan result to GitHub Security React
+        uses: github/codeql
