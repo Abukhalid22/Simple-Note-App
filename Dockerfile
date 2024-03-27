@@ -13,6 +13,9 @@ WORKDIR /django
 COPY requirements.txt /django/
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
+# Install python-dotenv module
+RUN pip install python-dotenv
+
 # After installing dependencies, copy the rest of your application
 COPY . /django/
 
