@@ -14,7 +14,7 @@ COPY requirements.txt /django/
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Copy the .env file into the container
-COPY .env /django/.env
+COPY mynotes/.env /django/.env
 
 # Install python-dotenv module
 RUN pip install python-dotenv
