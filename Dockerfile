@@ -13,14 +13,14 @@ WORKDIR /django
 COPY requirements.txt /django/
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
-# Copy the .env file into the container
-COPY .env /django/
+# Copy the .env file from the root directory to the current directory within the container
+COPY .env .
 
 # Install python-dotenv module
 RUN pip install python-dotenv
 
-# After installing dependencies, copy the rest of your application
-COPY . /django/
+# Copy the rest of your application code to the container
+COPY . .
 
 # Run Django migrations and start Gunicorn server as the default command
 CMD python manage.py migrate --noinput && gunicorn mynotes.wsgi:application --bind 0.0.0.0:8000
