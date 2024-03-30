@@ -3,26 +3,39 @@ version: '3.8'
 services:
   backend:
     build: 
-      context: .  # this path is where the Django Dockerfile is located
-    # command: /bin/sh -c "python manage.py migrate && gunicorn mynotes.wsgi:application --bind 0.0.0.0:8000"
-
+      context: .
+      dockerfile: Dockerfile
+    restart: always
     ports:
-      - "8000:8000"  # Exposes Django on port 8000 on your host
+      - "8000:8000"
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+    entrypoint: /entrypoint.sh
+    volumes:
+      - static:/django/static
+    command: bash -c "python manage.py migrate --noinput && gunicorn mynotes.wsgi:application --bind 0.0.0.0:8000"
 
   frontend:
     build:
-      context: ./frontend  # this path is where the frontend Dockerfile is located
-    volumes:
-      - react_build:/frontend/build
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
   nginx:
     image: nginx:latest
     ports:
-      - 80:8080
+      - "80:80"
+    restart: always
     volumes:
-      - ./nginx/nginx-setup.conf:/etc/nginx/conf.d/default.conf:ro
-      - react_build:/var/www/react
+      # - ./frontend/nginx/nginx-setup.conf:/etc/nginx/conf.d/default.conf:ro
+      - static:/static
     depends_on:
       - backend
       - frontend
+
 volumes:
-  react_build:
+  static:

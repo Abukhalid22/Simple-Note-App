@@ -1,7 +1,7 @@
 # Use an official lightweight Python runtime as a base image
 FROM python:3.11-slim
 
-# Set environment variables to prevent Python from writing .pyc files to disc
+# Set environment variables to prevent Python from writing .pyc files to disk
 # and to ensure stdout and stderr are directly forwarded to terminal without being buffered
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -11,16 +11,16 @@ WORKDIR /django
 
 # Copy the requirements file first to leverage Docker cache
 COPY requirements.txt /django/
+# Install dependencies
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
-
-# Copy the .env file from the root directory to the current directory within the container
-COPY .env .
-
-# Install python-dotenv module
-RUN pip install python-dotenv
 
 # Copy the rest of your application code to the container
 COPY . .
 
-# Run Django migrations and start Gunicorn server as the default command
-CMD python manage.py migrate --noinput && gunicorn mynotes.wsgi:application --bind 0.0.0.0:8000
+# Run Django migrations, collect static files and start Gunicorn server as the default command
+# Using an entrypoint script allows us to perform multiple commands
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/django/entrypoint.sh"]
+
+COPY . /django/
