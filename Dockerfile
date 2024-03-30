@@ -22,5 +22,3 @@ COPY . .
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/django/entrypoint.sh"]
-
-COPY . /django/

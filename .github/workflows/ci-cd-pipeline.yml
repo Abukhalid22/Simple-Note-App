@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - postgres-integration
 
 jobs:
   build-test-analyze-deploy:
