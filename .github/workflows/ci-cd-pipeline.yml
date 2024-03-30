@@ -17,7 +17,7 @@ jobs:
       DB_USER: ${{ secrets.DB_USER }}  
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }} 
       DB_HOST: localhost  # not sensetive
-      DB_PORT: 5432  # not sensetive
+      DB_PORT: 5432  # not sensetive as it is port
       PAT: ${{ secrets.MY_GITHUB_TOKEN }} # PAT
       USER: mctoosh94 # Docker Hub username
 
