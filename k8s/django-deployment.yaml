@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: django-backend
-        image: mctoosh94/mynotes:backend-9a655449430e2a5c3b3bf9e4b10ee56db786def6
+        image: mctoosh94/mynotes:backend-f8703e0cedd6081d36f5dde4faeb0c5ff4385127
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
@@ -23,3 +23,28 @@ spec:
           value: "1"
         - name: PYTHONDONTWRITEBYTECODE
           value: "1"
+        - name: DJANGO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: django-secret
+              key: secret_key
+        # Updated Database configuration from .env, using Secret and ConfigMap
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-config
+              key: dbname
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: password
+        - name: DB_HOST
+          value: "postgres"  # Kubernetes service name for PostgreSQL
+        - name: DB_PORT
+          value: "5432"
