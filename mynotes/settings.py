@@ -100,11 +100,11 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'NAME': os.getenv('DB_NAME', 'mynotesdb'),  # Fallback to 'default_db_name' if DB_NAME is not set
+        'USER': os.getenv('DB_USER'),  # Fallback to 'default_user' if DB_USER is not set
+        'PASSWORD': os.getenv('DB_PASSWORD'),  # Fallback to 'default_password' if DB_PASSWORD is not set
+        'HOST': os.getenv('DB_HOST', 'localhost'),  # Fallback to 'localhost' if DB_HOST is not set
+        'PORT': os.getenv('DB_PORT', '5432'),  # Fallback to '5432' if DB_PORT is not set
     }
     
 }

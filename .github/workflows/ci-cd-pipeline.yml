@@ -13,8 +13,14 @@ jobs:
       DJANGO_IMAGE_TAG: mctoosh94/mynotes:backend-${{ github.sha }}
       REACT_IMAGE_TAG: mctoosh94/mynotes:frontend-${{ github.sha }}
       DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      DB_NAME: ${{ secrets.DB_NAME }} 
+      DB_USER: ${{ secrets.DB_USER }}  
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }} 
+      DB_HOST: localhost  # not sensetive
+      DB_PORT: 5432  # not sensetive
       PAT: ${{ secrets.MY_GITHUB_TOKEN }} # PAT
       USER: mctoosh94 # Docker Hub username
+
 
     steps:
       - name: Checkout Repository
