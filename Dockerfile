@@ -17,8 +17,5 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # Copy the rest of your application code to the container
 COPY . .
 
-# Run Django migrations, collect static files and start Gunicorn server as the default command
-# Using an entrypoint script allows us to perform multiple commands
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/django/entrypoint.sh"]
+# Run Django migrations and start Gunicorn server as the default command
+CMD python manage.py migrate --noinput && gunicorn mynotes.wsgi:application --bind 0.0.0.0:8000
