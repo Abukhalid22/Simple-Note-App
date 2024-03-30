@@ -45,6 +45,6 @@ spec:
               name: postgres-secret
               key: password
         - name: DB_HOST
-          value: "postgres"  # Kubernetes service name for PostgreSQL
+          value: "postgres"  # Kubernetes service name for PostgreSQL -1
         - name: DB_PORT
           value: "5432"
